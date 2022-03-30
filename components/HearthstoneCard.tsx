@@ -17,7 +17,6 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { ReactNode } from "react";
 import { IHearthstoneCard } from "../util/themes/types/hearthstone.t";
 import { motion } from "framer-motion";
 
@@ -27,7 +26,7 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
   function CardImage() {
     return (
       <>
-        <Box maxW={{ base: "full", md: "15rem" }} maxH={"xs"} onClick={onOpen}>
+        <Box maxW={{ base: "15rem", md: "15rem" }} maxH={"xs"} onClick={onOpen}>
           <motion.div
             whileHover={{ scale: 1.03, cursor: "pointer" }}
             whileTap={{ scale: 0.96 }}
@@ -60,7 +59,6 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
                 </Center>
                 <Center>
                   <VStack
-                    width={""}
                     spacing={5}
                     px={{ base: 10, md: 0 }}
                     py={{ base: 10, md: 5 }}
@@ -124,8 +122,10 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
   }
   return (
     <>
-      <CardImage />
-      <CardModal />
+      <Center>
+        <CardImage />
+        <CardModal />
+      </Center>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Grid, GridItem, SimpleGrid } from "@chakra-ui/react";
+import { Grid, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import HearthstoneCard from "../components/HearthstoneCard";
@@ -18,7 +18,17 @@ const Home: NextPage = () => {
   }, []);
   return (
     <>
-      <Grid gap={4} column={2}>
+      <Grid
+        templateColumns={{
+          base: "repeat(2, 1fr)",
+          sm: "repeat(3, 1fr)",
+          md: "repeat(4, 1fr)",
+          lg: "repeat(5, 1fr)",
+          xl: "repeat(7, 1fr)",
+        }}
+        gap={4}
+        column={2}
+      >
         {cards.map((card, key) => (
           <HearthstoneCard key={key} {...card} />
         ))}
