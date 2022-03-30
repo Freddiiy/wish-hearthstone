@@ -51,7 +51,7 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
             rounded={"none"}
             alignItems={"center"}
           >
-            <ModalCloseButton />
+            <ModalCloseButton color={"white"} />
             <Flex justifyContent={"center"} alignItems={"center"}>
               <Stack direction={{ base: "column", md: "row" }}>
                 <Center>
