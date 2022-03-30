@@ -41,16 +41,15 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
   function CardModal() {
     return (
       <>
-        <Modal isOpen={isOpen} onClose={onClose} size={"2xl"} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} isCentered>
           <ModalOverlay bgColor={"blackAlpha.800"} />
           <ModalContent
             bgColor={"transparent"}
             shadow={"none"}
-            m={0}
+            mt={{ base: 150, md: 0 }}
+            mx={{ base: 2, md: 0 }}
             rounded={"none"}
             alignItems={"center"}
-            py={{ base: 3, md: 20 }}
-            px={{ baSE: 3, md: 20 }}
           >
             <ModalCloseButton />
             <Flex justifyContent={"center"} alignItems={"center"}>
