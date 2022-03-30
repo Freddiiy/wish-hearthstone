@@ -1,4 +1,3 @@
-import { Card, Col } from "react-bootstrap";
 import Image from "next/image";
 
 export interface IHearthstoneCard {
@@ -31,7 +30,7 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
       </div>
 
       <div>
-        <Image src={props.image} alt={""} height={250} width={250}/>
+        <Image src={props.image} alt={""} height={200} width={200}/>
       </div>
     </div>
   );
