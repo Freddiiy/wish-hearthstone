@@ -28,14 +28,17 @@ const Home: NextPage = () => {
   return (
     <>
       <HStack>
-        <Box width={"16rem"}>
-          <Box height={"100vh"} bgColor={"white"} position={"absolute"}>
-            <Flex justifyContent={"center"}>
-              <Text color={"white"} fontSize={"2xl"}>
-                Dillermand
-              </Text>
-            </Flex>
-          </Box>
+        <Box
+          width={"16rem"}
+          height={"100vh"}
+          bgColor={"white"}
+          position={"fixed"}
+        >
+          <Flex justifyContent={"center"}>
+            <Text color={"white"} fontSize={"2xl"}>
+              Dillermand
+            </Text>
+          </Flex>
         </Box>
         <Box>
           <Grid
