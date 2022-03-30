@@ -48,8 +48,12 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
             shadow={"none"}
             m={0}
             rounded={"none"}
+            height={"100vh"}
+            alignItems={"center"}
+            py={{ base: 3, md: 20 }}
+            px={{ baSE: 3, md: 20 }}
           >
-            <ModalCloseButton color={"white"} />
+            <ModalCloseButton />
             <Flex justifyContent={"center"} alignItems={"center"}>
               <Stack direction={{ base: "column", md: "row" }}>
                 <Center>
@@ -62,6 +66,7 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
                     spacing={5}
                     px={{ base: 10, md: 0 }}
                     py={{ base: 10, md: 5 }}
+                    maxWidth={"40rem"}
                   >
                     <Box>
                       <Text
