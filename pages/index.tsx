@@ -25,10 +25,8 @@ const Home: NextPage = () => {
           md: "repeat(4, 1fr)",
           lg: "repeat(5, 1fr)",
           xl: "repeat(7, 1fr)",
-          xxl: "repeat(9, 1fr)",
         }}
         gap={4}
-        column={2}
       >
         {cards.map((card, key) => (
           <HearthstoneCard key={key} {...card} />

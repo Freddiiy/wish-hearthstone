@@ -41,14 +41,13 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
   function CardModal() {
     return (
       <>
-        <Modal isOpen={isOpen} onClose={onClose} size={"full"}>
+        <Modal isOpen={isOpen} onClose={onClose} size={"2xl"} isCentered>
           <ModalOverlay bgColor={"blackAlpha.800"} />
           <ModalContent
             bgColor={"transparent"}
             shadow={"none"}
             m={0}
             rounded={"none"}
-            height={"100vh"}
             alignItems={"center"}
             py={{ base: 3, md: 20 }}
             px={{ baSE: 3, md: 20 }}
@@ -57,17 +56,12 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
             <Flex justifyContent={"center"} alignItems={"center"}>
               <Stack direction={{ base: "column", md: "row" }}>
                 <Center>
-                  <Box alignItems={"center"}>
+                  <Box>
                     <Image src={props.image} alt="Hearthstone Card" />
                   </Box>
                 </Center>
                 <Center>
-                  <VStack
-                    spacing={5}
-                    px={{ base: 10, md: 0 }}
-                    py={{ base: 10, md: 5 }}
-                    maxWidth={"40rem"}
-                  >
+                  <VStack spacing={5} maxWidth={"40rem"}>
                     <Box>
                       <Text
                         color={"white"}
