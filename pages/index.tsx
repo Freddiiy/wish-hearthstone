@@ -26,10 +26,17 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
+import { useDebouncedValue } from "@mantine/hooks";
 import axios from "axios";
 import { motion } from "framer-motion";
 import type { NextPage } from "next";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import HearthstoneCard from "../components/HearthstoneCard";
 import { dummyCard, dummyCard2 } from "../components/HearthstoneCard";
 import {
@@ -102,6 +109,12 @@ const Home: NextPage = () => {
     }
     function SidebarContent(boxProps: BoxProps) {
       const [inputValue, setInputValue] = useState<string>("");
+      const [debouncedValue] = useDebouncedValue<string>(inputValue, 400);
+
+      useEffect(() => {
+        if (debouncedValue === "") return;
+        fetchQuery(debouncedValue);
+      }, [debouncedValue]);
 
       return (
         <Box
@@ -143,65 +156,18 @@ const Home: NextPage = () => {
             <NavItem>
               <Text>Cock</Text>
             </NavItem>
-            <NavItem>
-              <FormControl onSubmit={() => fetchQuery(inputValue)}>
-                <AutoComplete
-                  openOnFocus
-                  emptyState={
-                    <Center>
-                      <Text color={"orange.300"}>
-                        {inputValue} returned nothing :(
-                      </Text>
-                    </Center>
-                  }
-                  onChange={(value: string) => setInputValue(value)}
-                >
-                  <AutoCompleteInput
-                    aria-label="No cards like that"
-                    variant={"filled"}
-                    _placeholder={{ opacity: 1, color: "orange.300" }}
-                    textColor={"orange.300"}
-                    type={"search"}
-                    focusBorderColor={"orange.300"}
-                    value={inputValue}
-                    onChange={(event: any) =>
-                      setInputValue(event.currentTarget.value)
-                    }
-                  />
-                  <Button
-                    bgColor={"orange.300"}
-                    color={"white"}
-                    _hover={{
-                      color: "white",
-                      borderColor: "orange.400",
-                      backgroundColor: "orange.400",
-                    }}
-                    onClick={() => {
-                      fetchQuery(inputValue);
-                    }}
-                  >
-                    Søg
-                  </Button>
-                  {/*
-                  <AutoCompleteList w={"full"} bgColor={"white"} shadow={"2xl"}>
-                    {typeof autocomplete !== "undefined"
-                      ? autocomplete.map((card, key) => (
-                          <AutoCompleteItem
-                            color={"blue.200"}
-                            fontWeight={"xl"}
-                            key={key}
-                            value={card.slug}
-                            _hover={{ backgroundColor: "gray.100" }}
-                          >
-                            {card.name}
-                          </AutoCompleteItem>
-                        ))
-                      : ""}
-                  </AutoCompleteList>
-                      */}
-                </AutoComplete>
-              </FormControl>
-            </NavItem>
+            <Input
+              placeholder="Search for card..."
+              variant={"filled"}
+              _placeholder={{ opacity: 1, color: "orange.300" }}
+              textColor={"orange.300"}
+              type={"search"}
+              focusBorderColor={"orange.300"}
+              value={inputValue}
+              onChange={(event: any) =>
+                setInputValue(event.currentTarget.value)
+              }
+            />
           </Flex>
         </Box>
       );
