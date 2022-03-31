@@ -359,6 +359,26 @@ const Home: NextPage = () => {
                   Cards loading :)
                 </Text>
               )}
+              {hsPage?.cards.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{
+                    opacity: 1,
+                    transition: {
+                      duration: 1,
+                    },
+                  }}
+                >
+                  <Text
+                    textColor={"black"}
+                    fontSize={"4xl"}
+                    fontWeight={"bold"}
+                    transition={".2sec"}
+                  >
+                    No cards were found :(
+                  </Text>
+                </motion.div>
+              ) : null}
             </AnimatePresence>
           </Grid>
         </motion.div>
