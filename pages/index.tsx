@@ -13,12 +13,19 @@ import {
 	GridItem,
 	HStack,
 	Input,
+	InputRightElement,
 	SimpleGrid,
 	Text,
 } from "@chakra-ui/react";
+import {
+	AutoComplete,
+	AutoCompleteInput,
+	AutoCompleteItem,
+	AutoCompleteList,
+} from "@choc-ui/chakra-autocomplete";
 import axios from "axios";
 import type {NextPage} from "next";
-import {ChangeEvent, ReactNode, useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import HearthstoneCard from "../components/HearthstoneCard";
 import {dummyCard, dummyCard2} from "../components/HearthstoneCard";
 import {HSCardsDb} from "../util/themes/tmpJsonDb/hearthstone.json";
@@ -114,25 +121,58 @@ const Home: NextPage = () => {
 						</NavItem>
 						<NavItem>
 							<FormControl>
-								<FormLabel htmlFor="input">Search card</FormLabel>
-								<Input
-									id="input"
-									type={"search"}
-									value={inputValue}
-									onChange={(event) => setInputValue(event.currentTarget.value)}
-								/>
-								<Button
-									onClick={handleSubmit}
-									bgColor={"blue.200"}
-									color={"white"}
-									_hover={{
-										color: "white",
-										borderColor: "blue.300",
-										backgroundColor: "blue.300",
-									}}
+								<AutoComplete
+									openOnFocus
+									emptyState={
+										<Center>
+											<Text color={"orange.300"}>No card like that</Text>
+										</Center>
+									}
+									onChange={(value: string) => setInputValue(value)}
 								>
-									Søg for ting
-								</Button>
+									<AutoCompleteInput
+										aria-label="No cards like that"
+										variant={"filled"}
+										_placeholder={{opacity: 1, color: "orange.300"}}
+										textColor={"orange.300"}
+										type={"text"}
+										focusBorderColor={"orange.300"}
+										value={inputValue}
+										onChange={(event) => setInputValue(event.target.value)}
+									/>
+									<InputRightElement>
+										<Button
+											bgColor={"orange.300"}
+											color={"white"}
+											_hover={{
+												color: "white",
+												borderColor: "orange.400",
+												backgroundColor: "orange.400",
+											}}
+											onClick={() => {
+												if (inputValue.length < 1) return;
+												fetchQuery(inputValue);
+											}}
+										>
+											Søg
+										</Button>
+									</InputRightElement>
+									<AutoCompleteList w={"full"} bgColor={"white"} shadow={"2xl"}>
+										{typeof hsCards !== "undefined"
+											? hsCards.map((card, key) => (
+													<AutoCompleteItem
+														color={"blue.200"}
+														fontWeight={"xl"}
+														key={key}
+														value={card}
+														_hover={{backgroundColor: "gray.100"}}
+													>
+														{card.name}
+													</AutoCompleteItem>
+											  ))
+											: ""}
+									</AutoCompleteList>
+								</AutoComplete>
 							</FormControl>
 						</NavItem>
 					</Flex>
