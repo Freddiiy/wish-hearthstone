@@ -11,7 +11,6 @@ export default async function handler(
     const { query: { params, p, hsClass }, method } = req;
 
     if (method === 'GET') {
-        if (params === undefined) return;
         if (Array.isArray(params)) return;
         if (Array.isArray(p)) return;
         if (Array.isArray(hsClass)) return;
@@ -27,13 +26,14 @@ export default async function handler(
     }
 }
 
-async function getCard(query: string, page: number, hsClass: string) {
+async function getCard(query: string | undefined, page: number, hsClass: string) {
+    const queryQuery = query === undefined ? "" : `&textFilter=${query}`
     const accessToken = process.env.ACCESS_TOKEN
-    const url = `https://eu.api.blizzard.com/hearthstone/cards?locale=en_US&access_token=${accessToken}&textFilter=${query}&page=${page}`
+    const url = `https://eu.api.blizzard.com/hearthstone/cards?locale=en_US&access_token=${accessToken}&page=${page}`
     const hsClassQuery = hsClass === "" ? "" : `&class=${hsClass}`;
-    if (query.length >= 1) {
+    if (queryQuery.length >= 1) {
         try {
-            const response = await axios.get<IHearthstonePage>(url + hsClassQuery);
+            const response = await axios.get<IHearthstonePage>(url + hsClassQuery + queryQuery);
             if (response.status == 200) {
                 const cards = await response.data
                 return cards;

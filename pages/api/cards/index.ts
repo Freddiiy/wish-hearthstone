@@ -26,7 +26,6 @@ async function getCards(page: number, hsClass: string) {
     const url = `https://eu.api.blizzard.com/hearthstone/cards?locale=en_US&access_token=${accessToken}&page=${page}`
         try {
             const response = await axios.get<IHearthstonePage>(url + hsClassQuery);
-            console.log(await response.status)
             if (response.status == 200) {
                 const cards = await response.data
                 return cards;

@@ -37,7 +37,7 @@ import Pagination from "@choc-ui/paginator";
 import { useDebouncedValue, usePagination } from "@mantine/hooks";
 import { PaginationParams } from "@mantine/hooks/lib/use-pagination/use-pagination";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
 import {
   ChangeEvent,
@@ -78,6 +78,12 @@ const Home: NextPage = () => {
   const animationItem = {
     hidden: { opacity: 0 },
     show: { opacity: 1 },
+    exit: {
+      transition: {
+        duration: 0.3,
+      },
+      opacity: 0,
+    },
   };
 
   useEffect(() => {
@@ -111,7 +117,6 @@ const Home: NextPage = () => {
     }
 
     fetchWithDebouced(debouncedValue, currentPage, hsClass);
-    setCurrentPage(1);
   }, [debouncedValue, currentPage, hsClass]);
 
   function AppShell({ children }: { children: ReactNode }) {
@@ -306,11 +311,10 @@ const Home: NextPage = () => {
         >
           <Pagination
             onChange={(page) => {
-              if (page === undefined) return;
-              setCurrentPage(page);
+              setCurrentPage(page === undefined ? 1 : page);
             }}
             defaultCurrent={1}
-            total={hsPage ? parseInt(hsPage.pageCount + "0") : 0}
+            total={parseInt(hsPage?.pageCount + "0")}
             paginationProps={{ display: "flex" }}
             pageNeighbours={3}
             baseStyles={{ bg: "gray.400" }}
@@ -343,17 +347,19 @@ const Home: NextPage = () => {
             }}
             gap={4}
           >
-            {hsPage ? (
-              hsPage.cards.map((card, key) => (
-                <motion.div key={key} variants={animationItem}>
-                  <HearthstoneCard key={key} {...card} />
-                </motion.div>
-              ))
-            ) : (
-              <Text textColor={"black"} fontSize={"4xl"} fontWeight={"bold"}>
-                Cards loading :)
-              </Text>
-            )}
+            <AnimatePresence>
+              {hsPage ? (
+                hsPage.cards.map((card, key) => (
+                  <motion.div key={card.id} variants={animationItem}>
+                    <HearthstoneCard key={card.id} {...card} />
+                  </motion.div>
+                ))
+              ) : (
+                <Text textColor={"black"} fontSize={"4xl"} fontWeight={"bold"}>
+                  Cards loading :)
+                </Text>
+              )}
+            </AnimatePresence>
           </Grid>
         </motion.div>
       </Box>
