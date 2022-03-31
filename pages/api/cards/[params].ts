@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { IHearthstonePage } from '../../../util/themes/types/hearthstone.t';
 import axios from "axios";
-import { parseUrl } from 'next/dist/shared/lib/router/utils/parse-url';
 
 export default async function handler(
     req: NextApiRequest,
@@ -15,13 +14,11 @@ export default async function handler(
         if (params === undefined) return;
         if (Array.isArray(params)) return;
         const parsedParams = encodeURI(params)
-        console.log(parsedParams)
-
 
         const cardPage = await getCard(parsedParams);
 
         if (cardPage === undefined) return;
-        console.log(cardPage.cards[0]);
+        console.log(cardPage.cards);
         res.status(200).json(cardPage)
     } else {
         res.setHeader('Allow', ['GET'])
@@ -33,7 +30,7 @@ async function getCard(query: string) {
     const accessToken = process.env.ACCESS_TOKEN
     if (query.length >= 1) {
         try {
-            const response = await axios.get<IHearthstonePage>(`https://eu.api.blizzard.com/hearthstone/cards?locale=en_US&access_token=${accessToken}`);
+            const response = await axios.get<IHearthstonePage>(`https://eu.api.blizzard.com/hearthstone/cards?locale=en_US&access_token=${accessToken}&textFilter=${query}`);
             if (response.status == 200) {
                 const cards = await response.data
                 return cards;
