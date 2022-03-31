@@ -16,9 +16,16 @@ import {
   IconButton,
   Input,
   InputRightElement,
+  Radio,
+  RadioGroup,
   SimpleGrid,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
   Text,
   useDisclosure,
+  Stack,
+  Wrap,
 } from "@chakra-ui/react";
 import {
   AutoComplete,
@@ -26,7 +33,9 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
-import { useDebouncedValue } from "@mantine/hooks";
+import Pagination from "@choc-ui/paginator";
+import { useDebouncedValue, usePagination } from "@mantine/hooks";
+import { PaginationParams } from "@mantine/hooks/lib/use-pagination/use-pagination";
 import axios from "axios";
 import { motion } from "framer-motion";
 import type { NextPage } from "next";
@@ -34,6 +43,7 @@ import {
   ChangeEvent,
   ChangeEventHandler,
   ReactNode,
+  useContext,
   useEffect,
   useState,
 } from "react";
@@ -45,8 +55,14 @@ import {
 } from "../util/themes/types/hearthstone.t";
 
 const Home: NextPage = () => {
-  const [hsCards, SetHsCards] = useState<IHearthstoneCard[]>();
+  const [hsPage, SetHsPage] = useState<IHearthstonePage>();
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [inputValue, setInputValue] = useState<string>("");
+  const [hsClass, setHsClass] = useState<string>("");
+  const [debouncedValue] = useDebouncedValue<string>(inputValue, 400);
 
   const animationContainer = {
     hidden: { opacity: 0 },
@@ -64,58 +80,42 @@ const Home: NextPage = () => {
     show: { opacity: 1 },
   };
 
-  async function fetchQuery(query: string) {
-    if (query === "") {
-      const response = await axios.get<IHearthstonePage>(`/api/cards/`);
-      const requestedCards = await response.data;
-      SetHsCards(requestedCards.cards);
-    } else {
-      const response = await axios.get<IHearthstonePage>(`/api/cards/${query}`);
-      const requestedCards = await response.data;
-      SetHsCards(requestedCards.cards);
-    }
-  }
-
   useEffect(() => {
     async function fetchCards() {
       const response = await axios.get<IHearthstonePage>(`/api/cards/`);
-      const requestedCards = await response.data;
-      SetHsCards(requestedCards.cards);
+      const requestedPage = await response.data;
+      SetHsPage(requestedPage);
     }
     fetchCards();
   }, []);
 
-  function AppShell({ children }: { children: ReactNode }) {
-    function NavItem({ children }: { children: ReactNode }) {
-      return (
-        <Flex
-          align="center"
-          px="4"
-          pl="4"
-          py="3"
-          cursor="pointer"
-          color={"black"}
-          _hover={{
-            bg: "gray.100",
-            color: "black",
-          }}
-          role="group"
-          fontWeight="semibold"
-          transition=".15s ease"
-        >
-          {children}
-        </Flex>
-      );
+  useEffect(() => {
+    async function fetchWithDebouced(
+      query: string,
+      page: number,
+      hsClass: string
+    ) {
+      if (query === "") {
+        const response = await axios.get<IHearthstonePage>(
+          `/api/cards/?p=${page}&hsClass=${hsClass}`
+        );
+        const requestedPage = await response.data;
+        SetHsPage(requestedPage);
+      } else {
+        const response = await axios.get<IHearthstonePage>(
+          `/api/cards/${query}?p=${page}&hsClass=${hsClass}`
+        );
+        const requestedPage = await response.data;
+        SetHsPage(requestedPage);
+      }
     }
+
+    fetchWithDebouced(debouncedValue, currentPage, hsClass);
+    setCurrentPage(1);
+  }, [debouncedValue, currentPage, hsClass]);
+
+  function AppShell({ children }: { children: ReactNode }) {
     function SidebarContent(boxProps: BoxProps) {
-      const [inputValue, setInputValue] = useState<string>("");
-      const [debouncedValue] = useDebouncedValue<string>(inputValue, 400);
-
-      useEffect(() => {
-        if (debouncedValue === "") return;
-        fetchQuery(debouncedValue);
-      }, [debouncedValue]);
-
       return (
         <Box
           as="nav"
@@ -152,23 +152,7 @@ const Home: NextPage = () => {
             fontSize="sm"
             color="gray.600"
             aria-label="Main Navigation"
-          >
-            <NavItem>
-              <Text>Cock</Text>
-            </NavItem>
-            <Input
-              placeholder="Search for card..."
-              variant={"filled"}
-              _placeholder={{ opacity: 1, color: "orange.300" }}
-              textColor={"orange.300"}
-              type={"search"}
-              focusBorderColor={"orange.300"}
-              value={inputValue}
-              onChange={(event: any) =>
-                setInputValue(event.currentTarget.value)
-              }
-            />
-          </Flex>
+          ></Flex>
         </Box>
       );
     }
@@ -176,15 +160,7 @@ const Home: NextPage = () => {
     return (
       <>
         <Box as="section" bg={"gray.100"} minH="100vh">
-          <SidebarContent display={{ base: "none", md: "unset" }} />
-          <Drawer isOpen={isOpen} onClose={onClose} placement="left">
-            <DrawerOverlay />
-            <DrawerContent>
-              <SidebarContent w="full" borderRight="none" />
-            </DrawerContent>
-          </Drawer>
-
-          <Box ml={{ base: 0, md: "60" }} transition=".3s ease">
+          <Box ml={{ base: 0, md: "0" }} transition=".3s ease">
             <Flex
               zIndex={"dropdown"}
               as="header"
@@ -210,6 +186,7 @@ const Home: NextPage = () => {
                 WISH HEARTHSTONE
               </Text>
             </Flex>
+
             <Box as="main" p={4} pt={"20"}>
               {children}
             </Box>
@@ -220,7 +197,137 @@ const Home: NextPage = () => {
   }
   return (
     <>
-      <AppShell>
+      <Box as="section" bg={"gray.100"} minH="100vh" pb={"20"}>
+        <Box height={"20"}>
+          <Flex
+            zIndex={"dropdown"}
+            as="header"
+            align="center"
+            justify="space-between"
+            w="full"
+            px="4"
+            bg={"white"}
+            borderBottomWidth="1px"
+            borderColor="blackAlpha.300"
+            h="14"
+            position={"fixed"}
+          >
+            <Text color={"black"} fontSize={{ base: "xl", md: "4xl" }}>
+              WISH HEARTHSTONE
+            </Text>
+          </Flex>
+        </Box>
+        <Box
+          px={{ base: 2, md: 20 }}
+          bgColor={"gray.300"}
+          py={{ base: 2, md: 20 }}
+          mx={{ base: 2, md: 20 }}
+          rounded={"2xl"}
+        >
+          <FormLabel>
+            <Text
+              fontSize={{ base: "2xl", md: "4xl" }}
+              textColor={"yellow.600"}
+            >
+              Search for card name, ability, text etc..
+            </Text>
+          </FormLabel>
+          <Input
+            placeholder="Search for card..."
+            variant={"filled"}
+            _placeholder={{ opacity: 1, color: "orange.300" }}
+            textColor={"orange.300"}
+            type={"search"}
+            focusBorderColor={"orange.300"}
+            value={inputValue}
+            onChange={(event: any) => setInputValue(event.currentTarget.value)}
+          />
+          <RadioGroup defaultValue="2" mt={"5"} onChange={setHsClass}>
+            <Center>
+              <Grid
+                textColor={"yellow.500"}
+                fontSize={"2xl"}
+                fontWeight={"bold"}
+                templateColumns={{
+                  base: "repeat(2, 1fr)",
+                  sm: "repeat(4, 1fr)",
+                  md: "repeat(4, 1fr)",
+                  lg: "repeat(4, 1fr)",
+                  xl: "repeat(4, 1fr)",
+                }}
+                gap={4}
+              >
+                <Radio colorScheme="gray" value="">
+                  Reset
+                </Radio>
+                <Radio colorScheme="gray" value="neutral">
+                  Neutral
+                </Radio>
+                <Radio colorScheme="yellow" value="druid">
+                  Druid
+                </Radio>
+                <Radio colorScheme="green" value="hunter">
+                  Hunter
+                </Radio>
+                <Radio colorScheme="cyan" value="mage">
+                  Mage
+                </Radio>
+                <Radio colorScheme="yellow" value="paladin">
+                  Paladin
+                </Radio>
+                <Radio colorScheme="gray" value="preist">
+                  Preist
+                </Radio>
+                <Radio colorScheme="blackAlpha" value="rogue">
+                  Rogue
+                </Radio>
+                <Radio colorScheme="blue" value="shaman">
+                  Shaman
+                </Radio>
+                <Radio colorScheme="purple" value="warlock">
+                  Warlock
+                </Radio>
+                <Radio colorScheme="red" value="warrior">
+                  Warrier
+                </Radio>
+                <Radio colorScheme="green" value="demonhunter">
+                  Demon Hunter
+                </Radio>
+              </Grid>
+            </Center>
+          </RadioGroup>
+        </Box>
+        <Flex
+          w="full"
+          bg={"gray.100"}
+          p={"10"}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Pagination
+            onChange={(page) => {
+              if (page === undefined) return;
+              setCurrentPage(page);
+            }}
+            defaultCurrent={1}
+            total={hsPage ? parseInt(hsPage.pageCount + "0") : 0}
+            paginationProps={{ display: "flex" }}
+            pageNeighbours={3}
+            baseStyles={{ bg: "gray.400" }}
+            activeStyles={{ bg: "yellow.600" }}
+            hoverStyles={{ bg: "gray.600" }}
+            rounded={"full"}
+            responsive={{
+              activePage: true,
+              totalRender: true,
+              fastBackward: false,
+              fastForward: false,
+              pageJumper: true,
+              pageSize: true,
+            }}
+            size={"sm"}
+          />
+        </Flex>
         <motion.div
           initial={"hidden"}
           animate={"show"}
@@ -236,18 +343,20 @@ const Home: NextPage = () => {
             }}
             gap={4}
           >
-            {hsCards ? (
-              hsCards.map((card, key) => (
+            {hsPage ? (
+              hsPage.cards.map((card, key) => (
                 <motion.div key={key} variants={animationItem}>
                   <HearthstoneCard key={key} {...card} />
                 </motion.div>
               ))
             ) : (
-              <Text color={"black"}>No cards :(</Text>
+              <Text textColor={"black"} fontSize={"4xl"} fontWeight={"bold"}>
+                Cards loading :)
+              </Text>
             )}
           </Grid>
         </motion.div>
-      </AppShell>
+      </Box>
     </>
   );
 };
