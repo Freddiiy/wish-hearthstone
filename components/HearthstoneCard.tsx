@@ -23,20 +23,11 @@ import { useState } from "react";
 
 export default function HearthstoneCard(props: IHearthstoneCard) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   function CardImage() {
     return (
       <>
-        <Box
-          maxW={{ base: "15rem", md: "15rem" }}
-          maxH={"xs"}
-          onClick={() => {
-            onOpen;
-            console.log(isOpen);
-            setSelectedId(props.id);
-          }}
-        >
+        <Box maxW={{ base: "15rem", md: "15rem" }} maxH={"xs"} onClick={onOpen}>
           <motion.div
             layoutId={props.slug}
             whileHover={{ scale: 1.03, cursor: "pointer" }}
@@ -52,102 +43,84 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
   function CardModal() {
     return (
       <>
-        <AnimatePresence>
-          {selectedId && (
-            <motion.div layoutId={props.slug}>
-              <Modal
-                isOpen={isOpen}
-                onClose={() => {
-                  console.log(isOpen);
-                  onClose;
-                  setSelectedId(null);
-                }}
-                size={"6xl"}
-                isCentered
-              >
-                <ModalOverlay bgColor={"blackAlpha.800"} />
-                <ModalContent
-                  bgColor={"transparent"}
-                  shadow={"none"}
-                  mt={{ base: 150, md: 0 }}
-                  mx={{ base: 2, md: 0 }}
-                  rounded={"none"}
-                  alignItems={"center"}
-                >
-                  <ModalCloseButton color={"white"} />
-                  <Flex justifyContent={"center"} alignItems={"center"}>
-                    <Stack direction={{ base: "column", md: "row" }}>
-                      <Center>
-                        <Box>
-                          <Image
-                            src={props.image}
-                            alt="Hearthstone Card"
-                            draggable={false}
+        <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} isCentered>
+          <ModalOverlay bgColor={"blackAlpha.800"} />
+          <ModalContent
+            bgColor={"transparent"}
+            shadow={"none"}
+            mt={{ base: 150, md: 0 }}
+            mx={{ base: 2, md: 0 }}
+            rounded={"none"}
+            alignItems={"center"}
+          >
+            <ModalCloseButton color={"white"} />
+            <Flex justifyContent={"center"} alignItems={"center"}>
+              <Stack direction={{ base: "column", md: "row" }}>
+                <Center>
+                  <Box>
+                    <Image
+                      src={props.image}
+                      alt="Hearthstone Card"
+                      draggable={false}
+                    />
+                  </Box>
+                </Center>
+                <Center>
+                  <VStack spacing={5} maxWidth={"40rem"}>
+                    <Box>
+                      <Text
+                        color={"white"}
+                        fontSize={{ base: "2xl", md: "4xl" }}
+                        mb={3}
+                      >
+                        {props.name}
+                      </Text>
+                      <Text color={"gray.300"} fontSize={"lg"} mb={3}>
+                        {props.flavorText}
+                      </Text>
+                      <Text
+                        color={"white"}
+                        fontSize={"lg"}
+                        dangerouslySetInnerHTML={{ __html: props.text }}
+                      ></Text>
+                      <List spacing={3} mt={10}>
+                        <HSListItem
+                          title="Type"
+                          text={cardType(props.cardTypeId)}
+                        />
+                        <HSListItem
+                          title="Rarity"
+                          text={cardRarity(props.rarityId)}
+                        />
+                        <HSListItem
+                          title="Class"
+                          text={cardClass(props.classId)}
+                        />
+                        <HSListItem
+                          title="Mana Cost"
+                          text={props.manaCost.toString()}
+                        />
+                        {props.attack ? (
+                          <HSListItem
+                            title="Attack"
+                            text={props.attack.toString()}
                           />
-                        </Box>
-                      </Center>
-                      <Center>
-                        <VStack spacing={5} maxWidth={"40rem"}>
-                          <Box>
-                            <Text
-                              color={"white"}
-                              fontSize={{ base: "2xl", md: "4xl" }}
-                              mb={3}
-                            >
-                              {props.name}
-                            </Text>
-                            <Text color={"gray.300"} fontSize={"lg"} mb={3}>
-                              {props.flavorText}
-                            </Text>
-                            <Text
-                              color={"white"}
-                              fontSize={"lg"}
-                              dangerouslySetInnerHTML={{ __html: props.text }}
-                            ></Text>
-                            <List spacing={3} mt={10}>
-                              <HSListItem
-                                title="Type"
-                                text={cardType(props.cardTypeId)}
-                              />
-                              <HSListItem
-                                title="Rarity"
-                                text={cardRarity(props.rarityId)}
-                              />
-                              <HSListItem
-                                title="Class"
-                                text={cardClass(props.classId)}
-                              />
-                              <HSListItem
-                                title="Mana Cost"
-                                text={props.manaCost.toString()}
-                              />
-                              {props.attack ? (
-                                <HSListItem
-                                  title="Attack"
-                                  text={props.attack.toString()}
-                                />
-                              ) : null}
-                              {props.health ? (
-                                <HSListItem
-                                  title="Health"
-                                  text={props.health.toString()}
-                                />
-                              ) : null}
-                              <HSListItem
-                                title="Artist"
-                                text={props.artistName}
-                              />
-                            </List>
-                          </Box>
-                        </VStack>
-                      </Center>
-                    </Stack>
-                  </Flex>
-                </ModalContent>
-              </Modal>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                        ) : null}
+                        {props.health ? (
+                          <HSListItem
+                            title="Health"
+                            text={props.health.toString()}
+                          />
+                        ) : null}
+                        <HSListItem title="Artist" text={props.artistName} />
+                      </List>
+                    </Box>
+                  </VStack>
+                </Center>
+              </Stack>
+            </Flex>
+          </ModalContent>
+        </Modal>
       </>
     );
   }
