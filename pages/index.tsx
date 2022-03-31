@@ -1,3 +1,4 @@
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
   BoxProps,
@@ -12,10 +13,12 @@ import {
   Grid,
   GridItem,
   HStack,
+  IconButton,
   Input,
   InputRightElement,
   SimpleGrid,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   AutoComplete,
@@ -36,6 +39,7 @@ import {
 
 const Home: NextPage = () => {
   const [hsCards, SetHsCards] = useState<IHearthstoneCard[]>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const animationContainer = {
     hidden: { opacity: 0 },
@@ -207,13 +211,42 @@ const Home: NextPage = () => {
       <>
         <Box as="section" bg={"gray.100"} minH="100vh">
           <SidebarContent display={{ base: "none", md: "unset" }} />
-          <Box
-            as="main"
-            p={4}
-            ml={{ base: 0, md: "60" }}
-            transition={".3s ease"}
-          >
-            {children}
+          <Drawer isOpen={isOpen} onClose={onClose} placement="left">
+            <DrawerOverlay />
+            <DrawerContent>
+              <SidebarContent w="full" borderRight="none" />
+            </DrawerContent>
+          </Drawer>
+
+          <Box ml={{ base: 0, md: "60" }} transition=".3s ease">
+            <Flex
+              zIndex={"dropdown"}
+              as="header"
+              align="center"
+              justify="space-between"
+              w="full"
+              px="4"
+              bg={"white"}
+              borderBottomWidth="1px"
+              borderColor="blackAlpha.300"
+              h="14"
+              position={"fixed"}
+            >
+              <IconButton
+                color={"black"}
+                aria-label="Menu"
+                display={{ base: "inline-flex", md: "none" }}
+                onClick={onOpen}
+                icon={<HamburgerIcon />}
+                size="sm"
+              />
+              <Text color={"black"} fontSize={{ base: "xl", md: "4xl" }}>
+                WISH HEARTHSTONE
+              </Text>
+            </Flex>
+            <Box as="main" p={4} pt={"20"}>
+              {children}
+            </Box>
           </Box>
         </Box>
       </>

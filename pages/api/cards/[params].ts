@@ -18,7 +18,6 @@ export default async function handler(
         const cardPage = await getCard(parsedParams);
 
         if (cardPage === undefined) return;
-        console.log(cardPage.cards);
         res.status(200).json(cardPage)
     } else {
         res.setHeader('Allow', ['GET'])
