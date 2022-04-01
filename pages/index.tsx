@@ -10,6 +10,9 @@ import {
   RadioGroup,
   Text,
   useDisclosure,
+  Stack,
+  HStack,
+  VStack,
 } from "@chakra-ui/react";
 import Pagination from "@choc-ui/paginator";
 import { useDebouncedValue, usePagination } from "@mantine/hooks";
@@ -122,78 +125,86 @@ const Home: NextPage = () => {
           mx={{ base: 2, md: 20 }}
           rounded={"2xl"}
         >
-          <FormLabel>
-            <Text
-              fontSize={{ base: "2xl", md: "4xl" }}
-              textColor={"yellow.600"}
-            >
-              Search for card name, ability, text etc..
-            </Text>
-          </FormLabel>
-          <Input
-            placeholder="Search for card..."
-            variant={"filled"}
-            _placeholder={{ opacity: 1, color: "orange.300" }}
-            textColor={"orange.300"}
-            type={"search"}
-            focusBorderColor={"orange.300"}
-            value={inputValue}
-            onChange={(event: any) => setInputValue(event.currentTarget.value)}
-          />
-          <RadioGroup defaultValue="2" mt={"5"} onChange={setHsClass}>
-            <Center>
-              <Grid
-                textColor={"yellow.500"}
-                fontSize={"2xl"}
-                fontWeight={"bold"}
-                templateColumns={{
-                  base: "repeat(2, 1fr)",
-                  sm: "repeat(4, 1fr)",
-                  md: "repeat(4, 1fr)",
-                  lg: "repeat(4, 1fr)",
-                  xl: "repeat(4, 1fr)",
-                }}
-                gap={4}
-              >
-                <Radio colorScheme="gray" value="">
-                  Reset
-                </Radio>
-                <Radio colorScheme="gray" value="neutral">
-                  Neutral
-                </Radio>
-                <Radio colorScheme="yellow" value="druid">
-                  Druid
-                </Radio>
-                <Radio colorScheme="green" value="hunter">
-                  Hunter
-                </Radio>
-                <Radio colorScheme="cyan" value="mage">
-                  Mage
-                </Radio>
-                <Radio colorScheme="yellow" value="paladin">
-                  Paladin
-                </Radio>
-                <Radio colorScheme="gray" value="preist">
-                  Preist
-                </Radio>
-                <Radio colorScheme="blackAlpha" value="rogue">
-                  Rogue
-                </Radio>
-                <Radio colorScheme="blue" value="shaman">
-                  Shaman
-                </Radio>
-                <Radio colorScheme="purple" value="warlock">
-                  Warlock
-                </Radio>
-                <Radio colorScheme="red" value="warrior">
-                  Warrier
-                </Radio>
-                <Radio colorScheme="green" value="demonhunter">
-                  Demon Hunter
-                </Radio>
-              </Grid>
-            </Center>
-          </RadioGroup>
+          <Center>
+            <Stack direction={{ base: "column", md: "row" }}>
+              <VStack>
+                <FormLabel>
+                  <Text
+                    fontSize={{ base: "2xl", md: "4xl" }}
+                    textColor={"yellow.600"}
+                  >
+                    Search for card name, ability, text etc..
+                  </Text>
+                </FormLabel>
+                <Input
+                  placeholder="Search for card..."
+                  variant={"filled"}
+                  _placeholder={{ opacity: 1, color: "orange.300" }}
+                  textColor={"orange.300"}
+                  type={"search"}
+                  focusBorderColor={"orange.300"}
+                  value={inputValue}
+                  onChange={(event: any) =>
+                    setInputValue(event.currentTarget.value)
+                  }
+                />
+              </VStack>
+              <RadioGroup defaultValue="2" mt={"5"} onChange={setHsClass}>
+                <Center>
+                  <Grid
+                    textColor={"yellow.500"}
+                    fontSize={"2xl"}
+                    fontWeight={"bold"}
+                    templateColumns={{
+                      base: "repeat(2, 1fr)",
+                      sm: "repeat(4, 1fr)",
+                      md: "repeat(4, 1fr)",
+                      lg: "repeat(4, 1fr)",
+                      xl: "repeat(4, 1fr)",
+                    }}
+                    gap={4}
+                  >
+                    <Radio colorScheme="gray" value="">
+                      Reset
+                    </Radio>
+                    <Radio colorScheme="gray" value="neutral">
+                      Neutral
+                    </Radio>
+                    <Radio colorScheme="yellow" value="druid">
+                      Druid
+                    </Radio>
+                    <Radio colorScheme="green" value="hunter">
+                      Hunter
+                    </Radio>
+                    <Radio colorScheme="cyan" value="mage">
+                      Mage
+                    </Radio>
+                    <Radio colorScheme="yellow" value="paladin">
+                      Paladin
+                    </Radio>
+                    <Radio colorScheme="gray" value="preist">
+                      Preist
+                    </Radio>
+                    <Radio colorScheme="blackAlpha" value="rogue">
+                      Rogue
+                    </Radio>
+                    <Radio colorScheme="blue" value="shaman">
+                      Shaman
+                    </Radio>
+                    <Radio colorScheme="purple" value="warlock">
+                      Warlock
+                    </Radio>
+                    <Radio colorScheme="red" value="warrior">
+                      Warrier
+                    </Radio>
+                    <Radio colorScheme="green" value="demonhunter">
+                      Demon Hunter
+                    </Radio>
+                  </Grid>
+                </Center>
+              </RadioGroup>
+            </Stack>
+          </Center>
         </Box>
         <Flex
           w="full"
