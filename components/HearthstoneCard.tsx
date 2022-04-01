@@ -193,8 +193,8 @@ function cardType(cardTypeId: number) {
 
 function cardRarity(cardRarirtId: number) {
   const rarity = new Map<number, string>([
-    [1, "Free"],
-    [2, "Common"],
+    [1, "Common"],
+    [2, "Free"],
     [3, "Rare"],
     [4, "Epic"],
     [5, "Legendary"],
