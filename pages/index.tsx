@@ -1,54 +1,24 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
-  BoxProps,
-  Button,
   Center,
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
   Flex,
-  FormControl,
   FormLabel,
   Grid,
-  GridItem,
-  HStack,
-  IconButton,
   Input,
-  InputRightElement,
   Radio,
   RadioGroup,
-  SimpleGrid,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
   Text,
   useDisclosure,
-  Stack,
-  Wrap,
 } from "@chakra-ui/react";
-import {
-  AutoComplete,
-  AutoCompleteInput,
-  AutoCompleteItem,
-  AutoCompleteList,
-} from "@choc-ui/chakra-autocomplete";
 import Pagination from "@choc-ui/paginator";
 import { useDebouncedValue, usePagination } from "@mantine/hooks";
 import { PaginationParams } from "@mantine/hooks/lib/use-pagination/use-pagination";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import HearthstoneCard from "../components/HearthstoneCard";
-import { dummyCard, dummyCard2 } from "../components/HearthstoneCard";
 import {
   IHearthstoneCard,
   IHearthstonePage,
@@ -123,87 +93,6 @@ const Home: NextPage = () => {
     fetchWithDebouced(debouncedValue, currentPage, hsClass);
   }, [debouncedValue, currentPage, hsClass]);
 
-  function AppShell({ children }: { children: ReactNode }) {
-    function SidebarContent(boxProps: BoxProps) {
-      return (
-        <Box
-          as="nav"
-          pos="fixed"
-          top="0"
-          left="0"
-          zIndex="sticky"
-          h="full"
-          pb="10"
-          overflowX="hidden"
-          overflowY="auto"
-          bg={"white"}
-          borderColor={"inherit"}
-          borderRightWidth="1px"
-          w="60"
-          {...boxProps}
-        >
-          <Flex px="4" py="5" align="center">
-            <Text
-              p={4}
-              fontSize="lg"
-              ml="2"
-              color={"black"}
-              fontWeight="semibold"
-              bgColor={"gray.100"}
-              rounded={"2xl"}
-            >
-              Wish-Hearthstone
-            </Text>
-          </Flex>
-          <Flex
-            direction="column"
-            as="nav"
-            fontSize="sm"
-            color="gray.600"
-            aria-label="Main Navigation"
-          ></Flex>
-        </Box>
-      );
-    }
-
-    return (
-      <>
-        <Box as="section" bg={"gray.100"} minH="100vh">
-          <Box ml={{ base: 0, md: "0" }} transition=".3s ease">
-            <Flex
-              zIndex={"dropdown"}
-              as="header"
-              align="center"
-              justify="space-between"
-              w="full"
-              px="4"
-              bg={"white"}
-              borderBottomWidth="1px"
-              borderColor="blackAlpha.300"
-              h="14"
-              position={"fixed"}
-            >
-              <IconButton
-                color={"black"}
-                aria-label="Menu"
-                display={{ base: "inline-flex", md: "none" }}
-                onClick={onOpen}
-                icon={<HamburgerIcon />}
-                size="sm"
-              />
-              <Text color={"black"} fontSize={{ base: "xl", md: "4xl" }}>
-                WISH HEARTHSTONE
-              </Text>
-            </Flex>
-
-            <Box as="main" p={4} pt={"20"}>
-              {children}
-            </Box>
-          </Box>
-        </Box>
-      </>
-    );
-  }
   return (
     <>
       <Box as="section" bg={"gray.100"} minH="100vh" pb={"20"}>
