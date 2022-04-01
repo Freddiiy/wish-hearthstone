@@ -107,12 +107,16 @@ const Home: NextPage = () => {
         );
         const requestedPage = await response.data;
         SetHsPage(requestedPage);
+        if (requestedPage.pageCount < currentPage)
+          setCurrentPage(requestedPage.pageCount);
       } else {
         const response = await axios.get<IHearthstonePage>(
           `/api/cards/${query}?p=${page}&hsClass=${hsClass}`
         );
         const requestedPage = await response.data;
         SetHsPage(requestedPage);
+        if (requestedPage.pageCount < currentPage)
+          setCurrentPage(requestedPage.pageCount);
       }
     }
 
