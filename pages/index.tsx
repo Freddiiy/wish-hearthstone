@@ -121,7 +121,7 @@ const Home: NextPage = () => {
         <Box
           px={{ base: 2, md: 20 }}
           bgColor={"gray.300"}
-          py={{ base: 2, md: 20 }}
+          py={{ base: 2, md: 10 }}
           mx={{ base: 2, md: 20 }}
           rounded={"2xl"}
         >
