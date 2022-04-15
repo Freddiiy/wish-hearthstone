@@ -81,8 +81,8 @@ export default function HearthstoneCard(props: IHearthstoneCard) {
                       <Text
                         color={"white"}
                         fontSize={"lg"}
-                        dangerouslySetInnerHTML={{ __html: props.text }}
-                      ></Text>
+                        dangerouslySetInnerHTML={{__html: props.text}}
+                        />
                       <List spacing={3} mt={10}>
                         <HSListItem
                           title="Type"
