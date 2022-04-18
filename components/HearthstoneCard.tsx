@@ -17,7 +17,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { IHearthstoneCard } from "../util/themes/types/hearthstone.t";
+import { IHearthstoneCard } from "../util/types/hearthstone.t";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 

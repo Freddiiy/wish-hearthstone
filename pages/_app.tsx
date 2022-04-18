@@ -6,7 +6,7 @@ import "@fontsource/open-sans/400.css";
 import "@fontsource/inter";
 import {
     IHearthstoneCard,
-} from "../util/themes/types/hearthstone.t";
+} from "../util/types/hearthstone.t";
 import axios from "axios";
 import AppShell from "../components/AppShell/Appshell";
 

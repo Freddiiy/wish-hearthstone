@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { IHearthstonePage } from '../../../util/themes/types/hearthstone.t';
+import { IHearthstonePage } from '../../../util/types/hearthstone.t';
 import axios from "axios";
 
 export default async function handler(

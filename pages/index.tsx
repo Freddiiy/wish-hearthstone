@@ -26,7 +26,7 @@ import HearthstoneCard from "../components/HearthstoneCard";
 import {
     IHearthstoneCard,
     IHearthstonePage,
-} from "../util/themes/types/hearthstone.t";
+} from "../util/types/hearthstone.t";
 
 const Home: NextPage = () => {
     const [hsPage, SetHsPage] = useState<IHearthstonePage>();

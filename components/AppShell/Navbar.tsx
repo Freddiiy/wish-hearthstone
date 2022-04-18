@@ -13,7 +13,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import {HamburgerIcon} from "@chakra-ui/icons";
-import {getAll} from "../../util/themes/fetchCards/fetchCards";
+import {getAll} from "../../util/fetchCards/fetchCards";
 
 const shellWidth = "80";
 
